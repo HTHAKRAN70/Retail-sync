@@ -1,0 +1,10 @@
+import express from 'express';
+import { addproduct, deleteproduct,editproduct } from '../controller/product.controller.js';
+import {getproduct} from '../controller/product.controller.js';
+import { verifytoken } from '../Utils/verifyuser.js';
+const router=express.Router();
+router.post('/addproduct',verifytoken,addproduct);
+router.get('/getproduct',getproduct);
+router.put('/editproduct/:productId',editproduct);
+router.delete('/deleteproduct',deleteproduct);
+export default router;

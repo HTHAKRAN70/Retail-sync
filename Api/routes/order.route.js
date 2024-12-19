@@ -1,0 +1,14 @@
+import express from 'express';
+import {addorder,getorder,getnumber,getretailerorder,getvendorOrder,changestatus} from '../controller/order.controller.js';
+import {sendmail,cancelorder} from '../controller/mail.cotroller.js';
+import { verifytoken } from '../Utils/verifyuser.js';
+const router =express.Router();
+router.post('/addorder',verifytoken,addorder);
+router.get('/getorder/:vendorId',verifytoken,getorder);
+router.get('/getvendorOrder/:vendorId',verifytoken,getvendorOrder);
+router.get('/getnumber',verifytoken,getnumber);
+router.post('/changestatus',verifytoken,changestatus);
+router.get('/getretailerorder/:retailerId',verifytoken,getretailerorder);
+router.put('/cancelorder',cancelorder);
+router.post('/confirmorder',verifytoken,sendmail);
+export default router;
