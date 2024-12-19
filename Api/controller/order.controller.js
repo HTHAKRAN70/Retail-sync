@@ -228,16 +228,16 @@ export const changestatus=async(req,res,next)=>{
             res.status(200).json({message:'Order not found'});
         }
         const transporter=nodemailer.createTransport({
-            host: "smtp.gmail.com",
+            host: process.env.SMTP_HOST,
             port: 465,
             secure: true,
             auth:{
-                user:"hthakran45@gmail.com",
-                pass:"rzgw dxws caak gfln",
+                user:process.env.SMTP_USER,
+                pass:process.env.SMTP_PASS,
             }
         })
         const mailOptions = {
-            from: "hthakran45@gmail.com",
+            from: process.env.SMTP_USER,
             to: retailerEmail,
             subject: "Order Actions",
             text: `Your order with Order ID ${orderid} has been ${statusid}`,
