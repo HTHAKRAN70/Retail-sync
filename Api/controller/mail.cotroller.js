@@ -64,17 +64,17 @@ const generateInvoicePDF = async (orderDetails) => {
         if (!currentOrder) return next(errorHandler(404, "Order not found"));
         const pdfPath = await generateInvoicePDF(order);
         const transporter=nodemailer.createTransport({
-            host: "smtp.gmail.com",
+            host: process.env.SMTP_HOST,
             port: 465,
             secure: true,
             auth:{
-                user:"hthakran45@gmail.com",
-                pass:"rzgw dxws caak gfln",
+                user:process.env.SMTP_USER,
+                pass:process.env.SMTP_PASS,
             }
         })
         await Order.findByIdAndUpdate(order.orderId, { status: "Confirmed" }, { new: true });
         const mailOptions = {
-            from: "hthakran45@gmail.com",
+            from: process.env.SMTP_USER,
             to: email,
             subject: "Order Confirmation",
             text: `Your order with Order ID ${order.orderId} has been confirmed. Find the invoice attached.`,
@@ -119,17 +119,17 @@ const generateInvoicePDF = async (orderDetails) => {
         return res.status(500).json({ message: 'Failed to update order status' });
       }
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
+        host: process.env.SMTP_HOST,
         port: 465,
         secure: true,
-        auth: {
-          user: "hthakran45@gmail.com",
-          pass: "rzgw dxws caak gfln",
-        },
+        auth:{
+            user:process.env.SMTP_USER,
+            pass:process.env.SMTP_PASS,
+        }
       });
   
       const mailOptions = {
-        from: "hthakran45@gmail.com",
+        from:process.env.SMTP_USER,
         to: email,
         subject: "Order Actions",
         text: `Your order with Order ID ${orderid} has been Cancelled`,
