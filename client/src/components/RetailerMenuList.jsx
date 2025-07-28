@@ -40,7 +40,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Menu } from 'antd';
-import { HomeOutlined, FileTextOutlined, ShoppingCartOutlined } from '@ant-design/icons';
+import { HomeOutlined, FileTextOutlined, ShoppingCartOutlined, MessageOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import '../index.css';
 
@@ -70,6 +70,10 @@ const MenuList = () => {
     navigate('/home?tab=order');
   };
 
+  const handleChatClick = () => {
+    navigate('/home?tab=chat');
+  };
+
   return (
     <Menu
       theme="dark"
@@ -85,6 +89,9 @@ const MenuList = () => {
       </Menu.Item>
       <Menu.Item key="cart" icon={<ShoppingCartOutlined />} onClick={handleCartClick}>
         Cart
+      </Menu.Item>
+      <Menu.Item key="chat" icon={<MessageOutlined />} onClick={handleChatClick}>
+        Chat
       </Menu.Item>
     </Menu>
   );

@@ -7,6 +7,7 @@ import {
   ShoppingCartOutlined,  // For Items
   FileTextOutlined,      // For Orders
   UserOutlined,          // For Customers
+  MessageOutlined,       // For Chat
 } from '@ant-design/icons';
 import { io } from 'socket.io-client';
 import axios from 'axios';
@@ -15,7 +16,7 @@ import { setPendingOrders } from '../Redux/user/userSlice.js';
 
 const MenuList = () => {
   const {currentUser}=useSelector((state)=>state.user);
-  
+  console.log("currentuser",currentUser);
   const vendorId = currentUser._id;
   const navigate = useNavigate();
   useEffect(()=>{
@@ -45,17 +46,16 @@ const MenuList = () => {
     };
     fetchordernumber();
   }, [vendorId]);
-  const pendingOrdersCount = useSelector((state) => state.user.pendingorders);
-
+  let pendingOrdersCount = useSelector((state) => state.user.pendingorders);
+ 
   useEffect(() => {
     socket.emit('registerVendor', vendorId);
     socket.on('newOrderNotification', (data) => {
       console.log('New order received:', data);
-      setOrderNotifications((prev) => [...prev, data.orderDetails]);
+      dispatch(setPendingOrders(pendingOrdersCount+1));
+      pendingOrdersCount++;
       setShowSalesBadge(true);
       setShowNewOrderBadge(true);
-
-      // Show notification
       notification.info({
         message: 'New Order Received',
         description: `You have received a new order.`,
@@ -87,6 +87,9 @@ const MenuList = () => {
   const handleitemclick = () => {
     navigate('/home?tab=Items');
   };
+  const handlechatapp = () => {
+    navigate('/home?tab=chat');
+  };
   const handlemyorder=()=>{
     navigate('/home?tab=MyOrders');
   }
@@ -114,6 +117,9 @@ const MenuList = () => {
       </Menu.Item>
       <Menu.Item key="sales-task-1" onClick={handlemyorder}  icon={<FileTextOutlined />}>
         Orders
+      </Menu.Item>
+      <Menu.Item key="sales-task-2" onClick={handlechatapp}  icon={<MessageOutlined />}>
+       Chat with {currentUser.roll=='vendor'?'Retailers':'Vendors'}
       </Menu.Item>
     </Menu>
   );

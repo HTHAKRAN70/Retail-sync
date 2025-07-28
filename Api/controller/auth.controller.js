@@ -28,7 +28,6 @@ const decrypt = (encryptedText) => {
     return decrypted.toString();
 };
 export const signupretailer = async (req, res, next) => {
-    console.log(req.body);
     const { username, email, password,roll,phone_no ,image} = req.body;
     if (!username ||!phone_no ||  phone_no===''  ||!roll ||roll==='' || !email || !password) {
         // console.log('thakran');
@@ -81,12 +80,10 @@ export const signupretailer = async (req, res, next) => {
 };
 export const signupvendor = async (req, res, next) => {
     const { username, email, password,roll,phone_no,image } = req.body;
-    console.log(req.body);
     if(!validator.isEmail(email)){
         return next(errorHandler(400,'Enter valid email format'));
     }
     if (!username ||!phone_no  || phone_no===''  ||!roll ||roll==='' || !email || !password) {
-        console.log('thakran');
         return next(errorHandler(400, 'All fields are required'));
     }
     if(password.length<8){
@@ -102,7 +99,6 @@ export const signupvendor = async (req, res, next) => {
         // Check if the user already exists
         const existingUser = await vendor.findOne({ email });
         if (existingUser) {
-            console.log("aarav")
             return next(errorHandler(400, 'User already exists with this email'));
         }
         if(phone_no.length!==10){
@@ -111,7 +107,6 @@ export const signupvendor = async (req, res, next) => {
         const hashedPassword = bcryptjs.hashSync(password, 10);
 
         // Create a new user
-        console.log("vendor",{username,phone_no,roll});
         const newUser = new vendor({
             username,
             email,
@@ -146,7 +141,6 @@ export const signin =async(req,res,next)=>{
         if(!validuser){
             validuser=await vendor.findOne({email});
             if(!validuser){
-                console.log("ccccc");
                 return next(errorHandler(400,'User  not found'));
             }
         }
@@ -212,7 +206,6 @@ export const sendOtp =async(req,res,next)=>{
         await transporter.sendMail(mailOptions);
         res.json({message:"OTP sent succussfully."});
     }catch(error){
-        console.log("Error sending Otp:",error);
         res.status(500).json({error:"Failed to send OTP."});
     }
 }
@@ -227,7 +220,6 @@ export const verifyOtp = async (req, res) => {
     //   const { otp: storedOtp, expiryTime } = storedOtpData;
       const { otp: encryptedOtp, expiryTime } = storedOtpData;
       if (new Date() > expiryTime) {
-        console.log("opt is expired");
         await Otp.deleteOne({ email }); 
         return res.status(400).json({ error: "OTP has expired. Please request a new one." });
       }
@@ -240,7 +232,6 @@ export const verifyOtp = async (req, res) => {
         return res.status(400).json({ error: "Invalid OTP." });
     }
       await Otp.deleteOne({ email }); 
-      console.log("confirmed");
       res.json({ message: "OTP verified successfully." });
     } catch (error) {
       console.error("Error verifying OTP:", error);

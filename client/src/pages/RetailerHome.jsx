@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { useLocation ,useNavigate} from 'react-router-dom';
 import RetailerInventory from '../components/RetailerInventory.jsx';
 import RetailerOrders from '../components/RetailerOrders.jsx';
+import ChatApp from '../components/ChatApp.jsx';
 const { Sider, Content } = Layout;
 
 const RetailerHome = () => {
@@ -52,8 +53,14 @@ const RetailerHome = () => {
           {tab === 'store' &&<Store/>}
           {tab === 'cart' && <Cart/>}
           {tab === 'order' &&<RetailerOrders/>}
+          {tab === 'chat' && (
+            <div>
+              <ChatApp/>
+            </div>
+          )}
         </Content>
       </Layout>
+      {/* <ChatNotification /> */}
     </Layout>
   );
 };
