@@ -41,8 +41,8 @@ const orderSchema = new mongoose.Schema({
           required:true,
         },
       },
-    retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'Retailer', required: true }, 
-    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor', required: true }, 
+    retailer: { type: mongoose.Schema.Types.ObjectId, ref: 'retailer', required: true }, 
+    vendor: { type: mongoose.Schema.Types.ObjectId, ref: 'vendor', required: true }, 
     products: [{
         productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
         quantity: { type: Number, required: true },

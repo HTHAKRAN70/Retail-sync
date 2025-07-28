@@ -359,7 +359,7 @@ const handleEdit = (product) => {
     setImageUploaded(null);
   }
   return (
-    <div>
+    <div className='p-1 bg-blue-200 bg-opacity-75 h-screen  '>
       <button className='bg-blue-600 p-1 border rounded-sm px-2' onClick={handleaddproductbutton}>
         <div className='flex'>
           <FaPlus className='mt-[0.12rem]' />

@@ -10,6 +10,8 @@ import { useLocation ,useNavigate} from 'react-router-dom';
 import MyOrders from '../components/MyOrders.jsx'
 import OrderManagement from '../components/OrderManagement.jsx';
 import { useSelector } from 'react-redux';
+import ChatApp from '../components/ChatApp.jsx';
+
 const { Sider, Content } = Layout;
 
 const VendorHome = () => {
@@ -45,15 +47,21 @@ const VendorHome = () => {
           setSearchText={setSearchText}
         />
         {/* <hr /> */}
-        <Content style={{ margin: ' 0', padding: '24px', background: '#fff' }}>
+        <Content >
           {/* {tab==inventroy} */}
           {tab ==='vendor'&&<Vendordashoboard />}
           {tab === 'Items' &&<InventoryManagement/>}
           {tab === 'Order-manage' && <OrderManagement/>}
           {tab === 'MyOrders' && <MyOrders/>}
+          {tab === 'chat' && (
+            <div>
+              <ChatApp/>
+            </div>
+          )}
           
         </Content>
       </Layout>
+      {/* <ChatNotification /> */}
     </Layout>
   );
 };

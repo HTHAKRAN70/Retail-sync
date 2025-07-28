@@ -87,9 +87,12 @@ export const addorder = async (req, res, next) => {
             await removeVendorfromcart(cart._id,vendorId);
         }
         await retailername.save();
-        const vendorSocketId = global.vendorConnections[vendorId]; // Global map to track online vendors
+        console.log("connections",global.vendorConnections);
+        console.log("vendorid",vendorId);
+        const vendorSocketId = global.vendorConnections[vendorId]; 
+        console.log(vendorSocketId);// Global map to track online vendors
         if (vendorSocketId) {
-            // console.log("socket bacha h abhi");
+            console.log("socket bacha h abhi");
               global.io.to(vendorSocketId).emit('newOrderNotification', {
                 orderDetails: { 
                     orderId: nanoid,

@@ -15,7 +15,7 @@ export const getvendor =async(req,res,next)=>{
             ...(req.query.address && { category: req.query.category }),
            
           })
-          console.log(users);
+          // console.log(users);
 
         }catch(error){
             console.log("error",error);
@@ -24,7 +24,7 @@ export const getvendor =async(req,res,next)=>{
           // .sort({ updatedAt: sortDirection })
           // .skip(StartIndex)
           // .limit(limit);
-         console.log("users",users);
+        //  console.log("users",users);
         const userwithoutPassword=users.map((user)=>{
             const {password, ...rest } =user._doc;
             return rest;
