@@ -100,7 +100,7 @@ function ChatApp() {
       };
 
       const handleUserStoppedTyping = (data) => {
-        if (data.chatId === currentChat._id) {
+        if (data.chatId === currentChat._id && data.userId !== currentUser._id) {
           setTypingUsers(prev => {
             const newSet = new Set(prev);
             newSet.delete(data.userId);
@@ -114,13 +114,30 @@ function ChatApp() {
       currentSocket.on('userStoppedTyping', handleUserStoppedTyping);
 
       return () => {
-        // console.log('Cleaning up chat-specific listeners for chat ID:', currentChat._id);
+        // Cleanup listeners to avoid duplicates
         currentSocket.off('newMessage', handleNewMessage);
         currentSocket.off('userTyping', handleUserTyping);
         currentSocket.off('userStoppedTyping', handleUserStoppedTyping);
       };
     }
   }, [socket, currentChat, currentUser?._id]);
+
+  // Join/leave chat rooms when the active chat changes, and reset typing state
+  useEffect(() => {
+    const currentSocket = socketService.getSocket();
+    if (!currentSocket) return;
+
+    if (currentChat?._id) {
+      currentSocket.emit('joinChat', currentChat._id); // join new room
+      setTypingUsers(new Set()); // clear typing indicators when switching chats
+    }
+
+    return () => {
+      if (currentChat?._id) {
+        currentSocket.emit('leaveChat', currentChat._id); // leave on unmount/change
+      }
+    };
+  }, [currentChat?._id]);
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -181,13 +198,6 @@ function ChatApp() {
       const chatRes = await axios.get(`/Api/Chat/${retailerId}/${vendorId}`);
       const chat = chatRes.data;
       setCurrentChat(chat);
-
-      const currentSocket = socketService.getSocket();
-      if (currentSocket && chat?._id) {
-        currentSocket.emit('joinChat', chat._id);
-        currentSocket.emit()
-        console.log(`Socket ${currentSocket.id} joined chat room: ${chat._id}`);
-      }
 
       const messagesRes = await axios.get(`/Api/Chat/${chat._id}/message`);
       setMessages(messagesRes.data || []);
@@ -433,10 +443,11 @@ function ChatApp() {
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                       </div>
                       <span className="text-xs">
-                        {Array.from(typingUsers).map(id => {
+                        {/* {Array.from(typingUsers).map(id => {
                           const user = contacts.find(c => c._id === id);
                           return user ? user.username : 'Someone';
-                        }).join(', ')} is typing...
+                        }).join(', ')} is  */}
+                        typing...
                       </span>
                     </div>
                   </div>

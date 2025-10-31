@@ -181,6 +181,12 @@ io.on('connection', (socket) => {
 
   if (userId) {
     global.onlineUsers.set(userId, socket.id);
+    // join a personal room for this user so all sockets for this userId receive notifications
+    try {
+      socket.join(userId);
+    } catch (e) {
+      console.warn('Failed to join personal room', userId, e);
+    }
     emitOnlineUsers();
     console.log(`${userType ?? 'user'} connected: ${userId}, Socket ID: ${socket.id}`);
   }

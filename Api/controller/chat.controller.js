@@ -266,17 +266,9 @@ export const sendMessage=async(req,res,next)=>{
             }
         });
 
-        // Emit socket event for real-time messaging
-        if (global.io) {
-            const chat = await Chat.findById(chatId);
-            if (chat) {
-                const recipientId = senderType === 'vendor' ? chat.participants.retailerId : chat.participants.vendorId;
-                global.io.emit('newMessage', {
-                    ...message.toObject(),
-                    recipientId: recipientId.toString()
-                });
-            }
-        }
+        // Realtime emission is handled by Socket.io 'sendMessage' event.
+        // The client emits 'sendMessage' after persistence so the server can
+        // broadcast to the room with proper tempId replacement.
 
         res.json(message);
     }catch(error){

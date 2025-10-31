@@ -103,25 +103,17 @@ export const addorder = async (req, res, next) => {
 
     await retailername.save();
 
-    // Emit notification to vendor if online
-    console.log("onlineUsers map:", global.onlineUsers);
-    console.log("vendor id", vendorId);
-    const vendorSocketId = global.onlineUsers.get(vendorId); // Map.get
-    console.log("vendorSocketId", vendorSocketId);
-    if (vendorSocketId) {
-      console.log("Emitting newOrderNotification to vendor socket.");
-      global.io.to(vendorSocketId).emit('newOrderNotification', {
-        orderDetails: {
-          orderId: nanoid,
-          retailer: retailerId,
-          products: products,
-          deliveryAddress: customerDetails.address || `${customerDetails.city || ''}, ${customerDetails.state || ''}`,
-          phone_no: customerDetails.phone,
-        }
-      });
-    } else {
-      console.log(`Vendor ${vendorId} not online (no socket).`);
-    }
+    // Emit notification to all sockets for this vendor via personal room
+    console.log("Emitting newOrderNotification to vendor room:", vendorId);
+    global.io.to(vendorId).emit('newOrderNotification', {
+      orderDetails: {
+        orderId: nanoid,
+        retailer: retailerId,
+        products: products,
+        deliveryAddress: customerDetails.address || `${customerDetails.city || ''}, ${customerDetails.state || ''}`,
+        phone_no: customerDetails.phone,
+      }
+    });
 
     res.json({ message: 'Order placed successfully', orderId: nanoid });
   } catch (error) {
