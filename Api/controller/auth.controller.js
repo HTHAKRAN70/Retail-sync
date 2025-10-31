@@ -177,7 +177,7 @@ export const sendOtp =async(req,res,next)=>{
     if(!validator.isEmail(email)){
         return next(errorHandler(400,'Enter valid email format'));
     }
-
+    console.log("otp",req.body);
     const otp=generateOtp(6);
     const encryptedOtp = encrypt(otp);
     const expiryTime = Date.now() + 5 * 60 * 1000; 
@@ -187,7 +187,7 @@ export const sendOtp =async(req,res,next)=>{
         secure: true,
         auth:{
             user:"hthakran45@gmail.com",
-            pass:"rzgw dxws caak gfln",
+            pass:"tnuo cbpn egds nrrl",
         }
     })
 
@@ -206,6 +206,7 @@ export const sendOtp =async(req,res,next)=>{
         await transporter.sendMail(mailOptions);
         res.json({message:"OTP sent succussfully."});
     }catch(error){
+        console.log("error sending otp",error);
         res.status(500).json({error:"Failed to send OTP."});
     }
 }

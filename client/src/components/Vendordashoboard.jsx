@@ -25,10 +25,6 @@ function Vendordashboard() {
 
         }
       }
-
-
-
-      
       const fetchPayments = async () => {
         try {
           const res = await axios.get(`Api/payment/getpayment/${currentUser._id}`);
